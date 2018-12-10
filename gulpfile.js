@@ -1,51 +1,83 @@
 const gulp = require("gulp");
-// gulp 服务器插件;
-const connect = require("gulp-connect");
-// gulp 合并插件;
-var concat = require('gulp-concat');
-// gulp 压缩插件;
-var uglify = require("gulp-uglify");
-// babel 插件;
-var babel = require("gulp-babel");
-// css 插件;
-var cleanCss = require("gulp-clean-css");
-// sass 编译插件;
-var sass = require("gulp-sass-china");
-const proxy=require("http-proxy-middleware");
+const babel = require("gulp-babel");
+const concat=require("gulp-concat");
+const sourcemaps = require("gulp-sourcemaps");
+const sass=require("gulp-sass");
+sass.compiler=require("node-sass")
+const connect =require("gulp-connect");
+const proxy = require("http-proxy-middleware");
+const uglify = require('gulp-uglify');
+
 gulp.task("html",()=>{
     return gulp.src("*.html")
-    .pipe(gulp.dest("dist/"))
-    .pipe(connect.reload());
+    .pipe(gulp.dest("./dist/"))
+    .pipe(connect.reload())
 })
-// gulp.task("toes5", function () {
-//     return gulp.src(["javascripts/*.js"])// ES6 源码存放的路径
-//       .pipe(babel()) 
-//       .pipe(gulp.dest("dist/javascripts/")); //转换成 ES5 存放的路径
-// });
 gulp.task("script",()=>{
-    return gulp.src(["javascripts/*.js"])
+    return gulp.src([
+            "./javascripts/Accordion.js",
+            "./javascripts/banner-swiper.js",
+            "./javascripts/index.js",
+            "./javascripts/Mounting.js",
+            "./javascripts/renderPage.js",
+            "./javascripts/select-check.js",
+            "./javascripts/select1.js",
+            "./javascripts/swiper.js",
+            "./javascripts/time.js",
+            "./javascripts/top_active.js",
+            "./javascripts/totop-swiper.js",
+        ])
+    .pipe(sourcemaps.init())
     // .pipe(babel())
-    .pipe(uglify())
     .pipe(concat("main.js"))
-    .pipe(gulp.dest("dist/javascripts/"))
+    .pipe(sourcemaps.write("."))
+    .pipe(gulp.dest("./dist/javascripts"))
 })
+gulp.task("script",()=>{
+    return gulp.src([
+            "./javascripts/list.js",
+        ])
+    .pipe(sourcemaps.init())
+    // .pipe(babel())
+    .pipe(concat("list.js"))
+    .pipe(sourcemaps.write("."))
+    .pipe(gulp.dest("./dist/javascripts"))
+})
+gulp.task("uglifyjs",function(){
+    return gulp.src("./dist/javascripts/*.js")
+    .pipe(uglify())
+    .pipe(gulp.dest("./dist/javascripts/min.js"))
+})
+gulp.task("build",["script","uglifyjs"])
 gulp.task("images",()=>{
     return gulp.src(["images/*.*"])
     .pipe(gulp.dest("dist/images/"))
 })
 gulp.task("styles", ()=>{
     return gulp.src(["stylesheets/*.css"])
-    .pipe(gulp.dest("dist/stylesheets"));
-})
-gulp.task("css",()=>{
-    return gulp.src(["stylesheets/*.css"])
-    .pipe(cleanCss())
-    .pipe(gulp.dest("dist/stylesheets"))
+    .pipe(gulp.dest("dist/stylesheets/"));
 })
 gulp.task("sass",()=>{
-    return gulp.src(["sass/*.scss"])
+    return gulp.src("./sass/*.scss")
     .pipe(sass().on("error",sass.logError))
-    .pipe(gulp.dest("dist/stylesheets"))
+    .pipe(gulp.dest("./dist/stylesheets/"))
+})
+gulp.task("connect",()=>{
+    connect.server({
+        port: 8001,
+        root:"dist/",
+        livereload:true,
+        middleware:function(connect,opt){
+            return [
+                proxy("/douban",{
+                    target:"https://api.douban.com",
+                    pathRewrite:{
+                        "/douban":"/"
+                    }
+                })
+            ]
+        }
+    })
 })
 gulp.task("watch",()=>{
     gulp.watch("*.html",["html"])
@@ -54,23 +86,4 @@ gulp.task("watch",()=>{
     gulp.watch("sass/*.scss",["html","sass"])
 
 })
-
-gulp.task('connect',function() {
-    connect.server({
-        port:8000,
-        root:"dist/",
-        livereload:true,
-        middleware:function(connect , opt){
-            return [
-                proxy("/api",{
-                    target:"http://localhost:3000",
-                    pathRewrite:{
-                        "^/api" : '/'
-                    }
-                })
-            ]
-        }
-    })
-})
-
 gulp.task("default",["watch","connect","html","script","images","sass"]);
