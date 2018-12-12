@@ -43,13 +43,11 @@
             };
             $.ajax(options)
             .then(function(res){
-                console.log(res);
                 this.renderPages(res);
             }.bind(this))
         },
         renderPages:function(data){
             var html="";
-            console.log(data)
             for(var i=0;i<data.length;i++){
                 html+=`
                 <li  class="item-wrap mobileProduct" >
@@ -160,15 +158,63 @@
     function Car(){};
     $.extend(Car.prototype,{
         init(){
-            this.box=$(".general")
+            this.box=$(".general");
+            this.getData();
             this.bindEvent();
         },
-        bindEvent(){
-             this.box.on("click",".btn-gwc",this.addCar.bind(this))
+        getData(){
+            var options={
+                url:"http://localhost:8001/json/goods.json",
+                type:"GET",
+                dataType:"json",
+            };
+            $.ajax(options)
+            .then(function(res){
+               this.goodslist=res;
+            }.bind(this))
         },
+        bindEvent(){
+             this.box.on("click",".btn-gwc",this.hanldeCarClick.bind(this))
+        },
+        hanldeCarClick(event){
+            var e=event||window.event;
+            var target=e.target||e.srcElement;
+            var sid=$(target).attr("data-id");
+            var goods=this.findJson(sid)[0];
+            this.addCar(goods,sid)
+        },
+        addCar(goods,sid){
+            $.extend(goods,{count:1});
+            var sgoods=JSON.stringify(goods);
+            if(!localStorage.cart2){
+                localStorage.setItem("cart2",`[${sgoods}]`);
+                return false;
+            };
+            var ogoods=JSON.parse(localStorage.cart2);
+            if(!this.hasId(ogoods,sid)){
+                ogoods.push(goods);
+            };
+            localStorage.setItem("cart2",JSON.stringify(ogoods))
 
+        },
+        findJson(sid){
+            return this.goodslist.filter(function(item){
+                return item.sid === sid;
+            })
+        }
+       ,
+        hasId(goods,sid){
+            for(var i=0;i<goods.length;i++){
+                if(goods[i].sid === sid){
+                    goods[i].count++;
+                    return true;
+                }
+            }
+            return false;
+        }
     })
-    new Car.init();
+    new Car().init();
+   
 })
  
 
