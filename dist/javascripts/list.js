@@ -49,30 +49,37 @@
         },
         renderPages:function(data){
             var html="";
+            console.log(data)
             for(var i=0;i<data.length;i++){
                 html+=`
-                <li  class="item-wrap mobileProduct">
+                <li  class="item-wrap mobileProduct"  data-id=${data[i].sid}>
                 <div class="item-bg ">
                     <div class="product-box">
                         <input type="hidden" class="hidenInfo">
                         <div class="res-img">
                             <div class="img-block">
-                                <a href="" class="sellPoint">
-                                <img alt="【热卖爆品】Apple iPhone XS Max 256GB 金色 移动联通电信4G手机 双卡双待" src="${data[i].adSrc}">
-                                <i class="rt"><img src="//image.suning.cn/uimg/pcms/label05/199118557640820508210400_05.png"></i></a>
+                            <a href="javascript:void(0)" class="sellPoint">
+                                    <img alt="【热卖爆品】Apple iPhone XS Max 256GB 金色 移动联通电信4G手机 双卡双待" src="${data[i].adSrc}">
+                                    <i class="rt"><img src="//image.suning.cn/uimg/pcms/label05/199118557640820508210400_05.png"></i>
+                                </a>
                             </div>
                             <div class="focus-box disable-scroll">
-                                <a href="javascript:void(0);" class="btn-l disabled"><b></b></a> <a href="javascript:void(0);" class="btn-r"><b></b></a>
+                                <a href="javascript:void(0)" class="btn-l disabled">
+                                    <b></b>
+                                </a> 
+                                <a href="javascript:void(0);" class="btn-r">
+                                    <b></b>
+                                </a>
                                 <div class="focus-img">
                                     <dl style="width: 120px;" class="10606649862subCode">
                                         <dd>
                                             <a href="javascript:void(0)">
-                                            <img width="32" height="32" src="${data[i].adSrc}">
+                                                <img width="32" height="32" src="${data[i].adSrc}">
                                             </a>
                                         </dd>
                                         <dd>
                                             <a href="javascript:void(0)">
-                                            <img width="32" height="32" src="${data[i].adSrc}">
+                                                <img width="32" height="32" src="${data[i].adSrc}">
                                             </a>
                                         </dd>
                                         <dd>
@@ -90,7 +97,7 @@
             <i>¥</i>${data[i].tPrice}</span>
                             </div>
                             <div class="title-selling-point">
-                                <a title="${data[i].sellpoint}" href="">${data[i].sellpoint}
+                                <a title="${data[i].sellpoint}" href="javascript:void(0)">${data[i].sellpoint}
                                 <em style="">${data[i].title}</em>
                                 </a>
                             </div>
@@ -99,7 +106,7 @@
                             </div>
                             <div class="evaluate-old clearfix">
                                 <div class="info-evaluate">
-                                <a target="_blank"  href=""><i>7.1万+</i>评价</a>
+                                <a   href="javascript:void(0)"><i>7.1万+</i>评价</a>
                                 </div>
                             </div>
                             <div class="store-stock">
@@ -115,7 +122,7 @@
                             <a  href="javascript:void(0);"  class="btn-sc"><i></i><em>已</em>收藏</a>
                             <input type="hidden" value="1" class="cart-ipt">
                             <input type="hidden" value="1" class="ajaxSuccess">
-                            <a href="" class="btn-gwc"><i></i>加入购物车</a>
+                            <a href="javascript:void(0)" class="btn-gwc"><i></i>加入购物车</a>
                         </div>
                     </div>
                 </div>
@@ -125,6 +132,7 @@
             this.general.html(html);
         },
         bindEvent:function(){
+            $(".product-list ul").on("click","li",this.saveCookie)
             //商品列表效果
             $(".general").on("mouseenter",".item-wrap",function(){
                 $(this).addClass("on")
@@ -132,6 +140,16 @@
             $(".general").on("mouseleave",".item-wrap",function(){
                 $(this).removeClass("on")
             });
+            //存储cookie
+        },
+        saveCookie:function(){
+            var li=$(".general li");
+            console.log($(this),li);
+            
+            if(li.index($(this))!=-1){
+                $.cookie("dataId",$(this).attr("data-id"));
+                location.href="detail.html"
+            }
         }
     })
     new PoP().init();

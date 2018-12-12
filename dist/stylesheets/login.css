@@ -1,0 +1,40 @@
+body {
+  background: #fff; }
+
+.header-login {
+  width: 970px;
+  height: 100px;
+  margin: 0 auto; }
+  .header-login .logo {
+    position: static;
+    float: left;
+    width: 189px;
+    height: 100%;
+    background: url(../images/logo.png) center no-repeat;
+    background-size: contain; }
+  .header-login .bind-phone {
+    float: left;
+    color: #333;
+    background: #fefff1;
+    border: 1px solid #fecd66;
+    line-height: 16px;
+    padding: 4px 6px; }
+  .header-login .advise {
+    float: right;
+    margin-top: 8px;
+    text-decoration: none; }
+  .header-login i {
+    float: left;
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    font-size: 12px;
+    font-family: simsun;
+    background: url(../images/sprite1.png) -67px -27px no-repeat; }
+
+.ng-footer .ng-s-footer {
+  padding-bottom: 0;
+  text-align: center; }
+
+.ng-footer .ng-s-f-con {
+  height: inherit; }

@@ -13,7 +13,7 @@ gulp.task("html",()=>{
     .pipe(gulp.dest("./dist/"))
     .pipe(connect.reload())
 })
-gulp.task("script",()=>{
+gulp.task("script1",()=>{
     return gulp.src([
             "./javascripts/Accordion.js",
             "./javascripts/banner-swiper.js",
@@ -33,7 +33,17 @@ gulp.task("script",()=>{
     .pipe(sourcemaps.write("."))
     .pipe(gulp.dest("./dist/javascripts"))
 })
-gulp.task("script",()=>{
+gulp.task("script2",()=>{
+    return gulp.src([
+            "./javascripts/detail.js",
+        ])
+    .pipe(sourcemaps.init())
+    // .pipe(babel())
+    .pipe(concat("detail.js"))
+    .pipe(sourcemaps.write("."))
+    .pipe(gulp.dest("./dist/javascripts"))
+})
+gulp.task("script3",()=>{
     return gulp.src([
             "./javascripts/list.js",
         ])
@@ -43,6 +53,8 @@ gulp.task("script",()=>{
     .pipe(sourcemaps.write("."))
     .pipe(gulp.dest("./dist/javascripts"))
 })
+
+
 gulp.task("uglifyjs",function(){
     return gulp.src("./dist/javascripts/*.js")
     .pipe(uglify())
@@ -82,8 +94,10 @@ gulp.task("connect",()=>{
 gulp.task("watch",()=>{
     gulp.watch("*.html",["html"])
     gulp.watch("images/*.*",["html","images"]);
-    gulp.watch("javascripts/*.js",["html","script"])
+    gulp.watch("javascripts/*.js",["html","script1"])
+    gulp.watch("javascripts/*.js",["html","script2"])
+    gulp.watch("javascripts/*.js",["html","script3"])
     gulp.watch("sass/*.scss",["html","sass"])
 
 })
-gulp.task("default",["watch","connect","html","script","images","sass"]);
+gulp.task("default",["watch","connect","html","script1","images","sass","script2","script3"]);
