@@ -1,0 +1,35 @@
+;$(function(){
+    //选择登陆方式
+    $(".tab-item").on("click",function(){
+        $(this).addClass("on").siblings(".tab-item").removeClass("on");
+        console.log($(this).index())
+        if($(this).index()===0){
+            $(this).parent().siblings(".scan-login").css("display","block").siblings(".pc-login").css("display","none")
+        }
+        if($(this).index()===1){
+            $(this).parent().siblings(".pc-login").css("display","block").siblings(".scan-login").css("display","none")
+        }
+    })
+    //二维码特效
+    $(".scan-box").on("mouseenter",function(){
+        $(".qrcode").addClass("edge").siblings(".phone-scan").css("display","block");
+    })
+    $(".scan-box").on("mouseleave",function(){
+        $(".qrcode").removeClass("edge").siblings(".phone-scan").css("display","none");
+    })
+    //选择登陆
+    $(".login-switch").on("click",function(){
+        $(".username-login").toggle();
+        $(".phone-login").toggle();
+    })
+    //聚焦
+    $(".input-box").on("click",function(){
+        $(this).children("label").css("display","none");
+        $(this).children("input")
+        .blur(function(){
+            $(this).siblings("label").css("display","block")
+        })
+    })
+   
+})
+//# sourceMappingURL=login.js.map

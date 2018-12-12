@@ -53,8 +53,26 @@ gulp.task("script3",()=>{
     .pipe(sourcemaps.write("."))
     .pipe(gulp.dest("./dist/javascripts"))
 })
-
-
+gulp.task("script4",()=>{
+    return gulp.src([
+            "./javascripts/login.js",
+        ])
+    .pipe(sourcemaps.init())
+    // .pipe(babel())
+    .pipe(concat("login.js"))
+    .pipe(sourcemaps.write("."))
+    .pipe(gulp.dest("./dist/javascripts"))
+})
+gulp.task("script5",()=>{
+    return gulp.src([
+            "./javascripts/cart.js",
+        ])
+    .pipe(sourcemaps.init())
+    // .pipe(babel())
+    .pipe(concat("cart.js"))
+    .pipe(sourcemaps.write("."))
+    .pipe(gulp.dest("./dist/javascripts"))
+})
 gulp.task("uglifyjs",function(){
     return gulp.src("./dist/javascripts/*.js")
     .pipe(uglify())
@@ -97,7 +115,10 @@ gulp.task("watch",()=>{
     gulp.watch("javascripts/*.js",["html","script1"])
     gulp.watch("javascripts/*.js",["html","script2"])
     gulp.watch("javascripts/*.js",["html","script3"])
+    gulp.watch("javascripts/*.js",["html","script4"])
+    gulp.watch("javascripts/*.js",["html","script5"])
+
     gulp.watch("sass/*.scss",["html","sass"])
 
 })
-gulp.task("default",["watch","connect","html","script1","images","sass","script2","script3"]);
+gulp.task("default",["watch","connect","html","script1","images","sass","script2","script3","script4","script5"]);

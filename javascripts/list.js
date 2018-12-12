@@ -52,13 +52,13 @@
             console.log(data)
             for(var i=0;i<data.length;i++){
                 html+=`
-                <li  class="item-wrap mobileProduct"  data-id=${data[i].sid}>
+                <li  class="item-wrap mobileProduct" >
                 <div class="item-bg ">
                     <div class="product-box">
                         <input type="hidden" class="hidenInfo">
                         <div class="res-img">
                             <div class="img-block">
-                            <a href="javascript:void(0)" class="sellPoint">
+                            <a href="javascript:void(0)" class="sellPoint"  data-id=${data[i].sid}>
                                     <img alt="【热卖爆品】Apple iPhone XS Max 256GB 金色 移动联通电信4G手机 双卡双待" src="${data[i].adSrc}">
                                     <i class="rt"><img src="//image.suning.cn/uimg/pcms/label05/199118557640820508210400_05.png"></i>
                                 </a>
@@ -122,7 +122,7 @@
                             <a  href="javascript:void(0);"  class="btn-sc"><i></i><em>已</em>收藏</a>
                             <input type="hidden" value="1" class="cart-ipt">
                             <input type="hidden" value="1" class="ajaxSuccess">
-                            <a href="javascript:void(0)" class="btn-gwc"><i></i>加入购物车</a>
+                            <a href="javascript:void(0)" class="btn-gwc" data-id=${data[i].sid}><i></i>加入购物车</a>
                         </div>
                     </div>
                 </div>
@@ -132,7 +132,7 @@
             this.general.html(html);
         },
         bindEvent:function(){
-            $(".product-list ul").on("click","li",this.saveCookie)
+            $(".product-list ul").on("click",".sellPoint",this.saveCookie)
             //商品列表效果
             $(".general").on("mouseenter",".item-wrap",function(){
                 $(this).addClass("on")
@@ -143,10 +143,10 @@
             //存储cookie
         },
         saveCookie:function(){
-            var li=$(".general li");
-            console.log($(this),li);
+            var a=$(".general .sellPoint");
+            console.log($(this),a);
             
-            if(li.index($(this))!=-1){
+            if(a.index($(this))!=-1){
                 $.cookie("dataId",$(this).attr("data-id"));
                 location.href="detail.html"
             }
@@ -155,5 +155,20 @@
     new PoP().init();
 })
 
+//购物车添加数据
+;$(function(){
+    function Car(){};
+    $.extend(Car.prototype,{
+        init(){
+            this.box=$(".general")
+            this.bindEvent();
+        },
+        bindEvent(){
+             this.box.on("click",".btn-gwc",this.addCar.bind(this))
+        },
+
+    })
+    new Car.init();
+})
  
 
